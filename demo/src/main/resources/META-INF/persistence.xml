@@ -6,8 +6,7 @@
     <persistence-unit name="default">
 
     </persistence-unit>
-    <persistence-unit name="PersonPU" transaction-type="JTA">
+    <persistence-unit name="defaultTdp" transaction-type="JTA">
         <jta-data-source>jdbc/myFirstResource</jta-data-source>
-        <class>com.atf.demo.Person</class>
     </persistence-unit>
 </persistence>

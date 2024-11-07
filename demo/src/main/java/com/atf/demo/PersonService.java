@@ -7,7 +7,7 @@ import jakarta.persistence.PersistenceContext;
 @Stateless
 public class PersonService implements PersonServiceRemote {
 
-    @PersistenceContext(unitName = "PersonPU")
+    @PersistenceContext(unitName = "defaultTdp")
     private EntityManager em;
     public void addPerson(String name) {
         Person person = new Person(name);
