@@ -8,8 +8,9 @@ import java.util.List;
 public interface CarServiceRemote {
     public Car getCar(Long id);
     public List<Car> getAllCars(int limit);
-    public void addCar(String brand, String model, int year,Long rentalId);
+    public List<String> getAllAvailableCars();
     public void addCar(String brand, String model, int year);
-    public void updateCar(Long carId,Car newCar);
-    public void deleteCar(Car car);
+    public void updateCar(Car newCar);
+    public void updateCar(String newCar);
+    public void deleteCar(Long carId);
 }

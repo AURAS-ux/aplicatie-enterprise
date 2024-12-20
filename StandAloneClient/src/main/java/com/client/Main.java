@@ -1,40 +1,26 @@
 package com.client;
 
 
-import com.atf.demo.PersonServiceRemote;
-import ejbs.Rental.Rental;
-import ejbs.Rental.RentalServiceRemote;
+import com.google.gson.Gson;
 import ejbs.car.Car;
 import ejbs.car.CarServiceRemote;
+import ejbs.Rental.RentalServiceRemote;
 import ejbs.customer.Customer;
 import ejbs.customer.CustomerServiceRemote;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.sql.Date;
-import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try {
             InitialContext ctx = new InitialContext();
-            CarServiceRemote service = (CarServiceRemote) ctx.lookup("java:global/demo-1.0-SNAPSHOT/CarService!ejbs.car.CarServiceRemote");
-            RentalServiceRemote rentalService = (RentalServiceRemote) ctx.lookup("java:global/demo-1.0-SNAPSHOT/RentalService!ejbs.Rental.RentalServiceRemote");
-            Rental carRental = rentalService.getRental(1L);
-            System.out.println(carRental);
-            Car newCar = new Car("Audi","A4",2014,carRental);
-            System.out.println(newCar);
-            service.updateCar(1L,newCar);
-            System.out.println("Car added successfully");
-
-//
-//            LocalDate startDate = LocalDate.of(2020, 12, 1);
-//            LocalDate endDate = LocalDate.of(2020, 12, 20);
-//
-//            Date sqlStartDate = Date.valueOf(startDate);
-//            Date sqlEndDate = Date.valueOf(endDate);
-//            service.addRental(1L,1L,sqlStartDate,sqlEndDate);
-//            System.out.println("Rentals added");
+            CustomerServiceRemote customerService = (CustomerServiceRemote) ctx.lookup("java:global/demo-1.0-SNAPSHOT/CustomerService!ejbs.customer.CustomerServiceRemote");
+            List<Customer> customers = customerService.getCustomers(2);
+            for (Customer customer : customers) {
+                System.out.println(customer);
+            }
         }catch (Exception e) {
             e.printStackTrace();
         }

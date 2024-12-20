@@ -8,10 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "Rental")
+@NamedQuery(name = "getAllRentals",query = "select r from Rental r")
+@NamedQuery(name = "getRentalsByCustomer",query = "select rent from Rental rent where rent.customer.customer_id = :customerId")
 public class Rental implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -37,9 +38,22 @@ public class Rental implements Serializable {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    public Rental(Date rentalDate, Date returnDate, Car car, Customer customer) {
+    @NotNull
+    @Column(name = "rental_price", nullable = false)
+    private Integer rentalPrice;
+
+    public Integer getRentalPrice() {
+        return rentalPrice;
+    }
+
+    public void setRentalPrice(Integer rentalPrice) {
+        this.rentalPrice = rentalPrice;
+    }
+
+    public Rental(Date rentalDate, Date returnDate, Car car, Customer customer,Integer price) {
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
+        this.rentalPrice = price;
         this.car = car;
         this.customer = customer;
     }
@@ -94,6 +108,7 @@ public class Rental implements Serializable {
                 "rental_id=" + rental_id +
                 ", rentalDate=" + rentalDate +
                 ", returnDate=" + returnDate +
+                ", rentalPrice=" + rentalPrice +
                 ", car=" + car +
                 ", customer=" + customer +
                 '}';

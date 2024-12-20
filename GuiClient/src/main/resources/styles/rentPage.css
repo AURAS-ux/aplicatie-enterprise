@@ -1,0 +1,9 @@
+.grid-bg{
+    background-color: #202020;
+}
+#title{
+    text-align: center;
+    color: wheat;
+    font-size: large;
+    font-family: "Times New Roman", serif;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:view>
+    <h:form>
+        <h:panelGrid columns="1" cellspacing="1" cellpadding="10" styleClass="grid-bg">
+            <h:outputLabel value="Welcome to the rental screen" id="title"/>
+            <h:commandButton value="Rent" action="#{managedRent.rent}"/>
+            <h:commandButton value="Refresh available cars" action="#{managedRent.refreshAvailableCars}"/>
+            
+            <h:messages globalOnly="true" style="color: red"/>
+            <h:outputScript rendered="#{not empty requestScope.showAlert}">
+                alert('You must select at least one car before renting.');
+            </h:outputScript>
+            <h:dataTable value="#{managedRent.availableCars}" var="car" border="1">
+                <h:column>
+                    <f:facet name="header">Select</f:facet>
+                    <h:selectBooleanCheckbox value="#{managedRent.selectedCarIds[car.car_id]}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{car.brand}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Model</f:facet>
+                    #{car.model}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Year</f:facet>
+                    #{car.year}
+                </h:column>
+            </h:dataTable>
+        </h:panelGrid>
+    </h:form>
+</f:view>
+</html>

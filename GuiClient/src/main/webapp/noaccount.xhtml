@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:form>
+        <h:panelGrid columns="1">
+                <h:outputLabel value="No account found for provided data"/>
+
+                <h:outputLabel for="name" value="Enter your name"/>
+                <h:inputText id="name" value="#{managedCustomer.name}" required="true"
+                             requiredMessage="Name is required"
+                />
+
+                <h:outputLabel for="licenseNr" value="Enter your License number"/>
+                <h:inputText id="licenseNr" value="#{managedCustomer.licenseId}" required="true"
+                             requiredMessage="License is required"
+                />
+
+                <h:outputLabel for="email" value="Enter your email"/>
+                <h:inputText id="email" value="#{managedCustomer.email}" required="true"
+                             requiredMessage="Email is required"
+                />
+
+                <h:outputLabel for="phone" value="Enter your phone number"/>
+                <h:inputText id="phone" value="#{managedCustomer.phone}" required="true"
+                             requiredMessage="Phone is required"
+                />
+                <h:commandButton value="Create Account" action="#{managedCustomer.SignIn}"/>
+                <h:messages style="color: red"/>
+
+        </h:panelGrid>
+    </h:form>
+</f:view>
+</html>

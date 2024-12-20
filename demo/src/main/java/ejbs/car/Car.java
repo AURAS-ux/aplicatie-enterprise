@@ -1,14 +1,16 @@
 package ejbs.car;
 
-import ejbs.Rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Car")
+@NamedQuery(name = "getAllCars",query = "select c from Car c")
+@NamedQuery(name = "getAvailableCars",query = "SELECT c FROM Car c WHERE c.car_id NOT IN (SELECT r.car.car_id FROM Rental r)")
 public class Car implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,16 +29,6 @@ public class Car implements Serializable {
     @Column(name = "year", nullable = false)
     private Integer year;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rental_id", nullable = true)
-    private transient Rental rental;
-
-    public Car( String brand, String model, Integer year, Rental rental) {
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.rental = rental;
-    }
 
     public Car( String brand, String model, Integer year) {
         this.brand = brand;
@@ -46,14 +38,6 @@ public class Car implements Serializable {
 
     public Car() {
 
-    }
-
-    public Rental getRental() {
-        return rental;
-    }
-
-    public void setRental(Rental rental) {
-        this.rental = rental;
     }
 
     public Integer getYear() {
@@ -95,7 +79,19 @@ public class Car implements Serializable {
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", year=" + year +
-                ", rental=" + rental +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(car_id, car.car_id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(year, car.year);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(car_id, brand, model, year);
     }
 }

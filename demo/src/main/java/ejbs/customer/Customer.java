@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="customer")
+@NamedQuery(name = "getAllCustomers",query = "select c from Customer c")
+@NamedQuery(name = "findByEmailAndLicense", query = "SELECT c FROM Customer c WHERE c.email = :email AND c.licenceNr = :licenseId")
 public class Customer implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
