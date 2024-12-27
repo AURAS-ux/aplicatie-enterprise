@@ -38,6 +38,16 @@ public class RentManagedBean implements Serializable {
 
     private List<Rental> customerRentals;
 
+    private Map<Long,String> rentDays;
+
+    public void setRentDays(Map<Long,String> rentDays) {
+        this.rentDays = rentDays;
+    }
+
+    public Map<Long,String> getRentDays() {
+        return rentDays;
+    }
+
     public void setCustomerManagedBean(CustomerManagedBean customerManagedBean) {
         this.customerManagedBean = customerManagedBean;
     }
@@ -64,6 +74,7 @@ public class RentManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.rentDays = new HashMap<>();
         this.gson = new Gson();
         this.availableCars = new ArrayList<>();
         this.selectedCarIds = new HashMap<>();
@@ -92,8 +103,32 @@ public class RentManagedBean implements Serializable {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
+
+
         for(Long selectedItem : selectedItems) {
-            rentService.addRental(selectedItem,customerManagedBean.getCustomerId(), Date.valueOf(LocalDate.now()),Date.valueOf(LocalDate.now().plusDays(5)),90);
+            String days = rentDays.getOrDefault(selectedItem,"0");
+            if (days == null || Integer.parseInt(days) <= 0) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please specify a valid number of rental days for all selected cars."));
+                return null;
+            }
+
+            Car car = availableCars.stream()
+                    .filter(c -> c.getCar_id().equals(selectedItem))
+                    .findFirst()
+                    .orElse(null);
+
+            if (car == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Selected car not found."));
+                return null;
+            }
+
+            // Calculate total price
+            int totalPrice = car.getPrice() * Integer.parseInt(days);
+
+
+            rentService.addRental(selectedItem,customerManagedBean.getCustomerId(), Date.valueOf(LocalDate.now()),Date.valueOf(LocalDate.now().plusDays(Integer.parseInt(days))),totalPrice);
         }
         refreshAvailableCars();
         return "succes?faces-redirect=true";

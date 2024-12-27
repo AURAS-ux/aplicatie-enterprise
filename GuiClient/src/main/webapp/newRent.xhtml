@@ -34,6 +34,14 @@
                     <f:facet name="header">Year</f:facet>
                     #{car.year}
                 </h:column>
+                <h:column>
+                    <f:facet name="header">Price</f:facet>
+                    #{car.price}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Period(in days)</f:facet>
+                    <h:inputText value="#{managedRent.rentDays[car.car_id]}"/>
+                </h:column>
             </h:dataTable>
         </h:panelGrid>
     </h:form>

@@ -29,11 +29,16 @@ public class Car implements Serializable {
     @Column(name = "year", nullable = false)
     private Integer year;
 
+    @NotNull
+    @Column(name = "price",nullable = false)
+    private Integer price;
 
-    public Car( String brand, String model, Integer year) {
+
+    public Car( String brand, String model, Integer year,Integer price) {
         this.brand = brand;
         this.model = model;
         this.year = year;
+        this.price = price;
     }
 
     public Car() {
@@ -72,6 +77,14 @@ public class Car implements Serializable {
         return car_id;
     }
 
+    public @NotNull Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(@NotNull Integer price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -79,6 +92,7 @@ public class Car implements Serializable {
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
                 ", year=" + year +
+                ", price=" + price +
                 '}';
     }
 
@@ -87,11 +101,11 @@ public class Car implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Objects.equals(car_id, car.car_id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(year, car.year);
+        return Objects.equals(car_id, car.car_id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(year, car.year) && Objects.equals(price, car.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(car_id, brand, model, year);
+        return Objects.hash(car_id, brand, model, year, price);
     }
 }

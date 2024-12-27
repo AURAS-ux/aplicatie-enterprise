@@ -6,7 +6,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
-    <h:outputLabel value="Hello, world"/>
 <!--    <h:outputText value="#{managedRent.customerRentals}"/>-->
     <h:dataTable value="#{managedRent.customerRentals}" var="rental" border="1">
         <h:column>
@@ -24,10 +23,6 @@
         <h:column>
             <f:facet name="header">Car Model</f:facet>
             #{rental.car.model}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Return Date</f:facet>
-            #{rental.returnDate}
         </h:column>
         <h:column>
             <f:facet name="header">Return Date</f:facet>
