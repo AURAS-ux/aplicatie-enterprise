@@ -50,7 +50,7 @@ public class CarService implements CarServiceRemote {
     }
 
     @Override
-    public void updateCar(Car newCar) {
+    public void updateCar(Long id, Car newCar) {
         System.out.println("Received Car: " + newCar);
         em.merge(newCar);
     }

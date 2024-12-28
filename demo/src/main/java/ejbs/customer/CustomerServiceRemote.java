@@ -12,5 +12,6 @@ public interface CustomerServiceRemote {
     public List<Customer> getCustomers(int limit);
     public void addCustomer(String name,String licenseNr,String email,String phone);
     public void updateCustomer(String jsonSerializedCustomer);
+    public void updateCustomer(Customer newCustomer);
     public void deleteCustomer(Long id);
 }

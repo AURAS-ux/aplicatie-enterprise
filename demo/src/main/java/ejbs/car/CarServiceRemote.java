@@ -10,7 +10,7 @@ public interface CarServiceRemote {
     public List<Car> getAllCars(int limit);
     public List<String> getAllAvailableCars();
     public void addCar(String brand, String model, int year,int price);
-    public void updateCar(Car newCar);
+    public void updateCar(Long id, Car newCar);
     public void updateCar(String newCar);
     public void deleteCar(Long carId);
 }

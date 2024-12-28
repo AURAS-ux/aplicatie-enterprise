@@ -7,8 +7,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
     <h:form>
-        <h:panelGrid columns="1" cellpadding="10" cellspacing="1">
-            <h:outputLabel value="Welcome user ${managedCustomer.name}"/>
+        <h:panelGrid columns="2" cellpadding="10" cellspacing="1" style="align-items: center;">
+            <h:outputLabel value="Welcome user " for="userName"/>
+            <h:outputLink id="userName" value="#{request.contextPath}/userProfile.xhtml">
+                ${managedCustomer.name}
+            </h:outputLink>
             <h:commandButton value="New Rent" action="#{managedRent.onNewRent()}"/>
             <h:commandButton value="Show Rents" action="#{managedRent.onShowRents()}"/>
         </h:panelGrid>

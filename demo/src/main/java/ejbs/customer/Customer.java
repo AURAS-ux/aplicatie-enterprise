@@ -37,12 +37,25 @@ public class Customer implements Serializable {
     @Column(name = "phone", nullable = false)
     private String phone;
 
+    @NotNull
+    @Column(name = "is_admin",nullable = false)
+    private Boolean isAdmin;
+
     public Customer(){}
     public Customer(String name, String licenceNr, String email, String phone) {
         this.name = name;
         this.licenceNr = licenceNr;
         this.email = email;
         this.phone = phone;
+    }
+
+    public Customer(Long customer_id, String name, String licenceNr, String email, String phone, Boolean isAdmin) {
+        this.customer_id = customer_id;
+        this.name = name;
+        this.licenceNr = licenceNr;
+        this.email = email;
+        this.phone = phone;
+        this.isAdmin = isAdmin;
     }
 
     public String getPhone() {
@@ -85,6 +98,14 @@ public class Customer implements Serializable {
         return customer_id;
     }
 
+    public @NotNull Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(@NotNull Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -93,6 +114,7 @@ public class Customer implements Serializable {
                 ", licenceNr='" + licenceNr + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", isAdmin='" + isAdmin + '\'' +
                 '}';
     }
 }

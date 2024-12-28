@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:form>
+        <h:panelGrid columns="1" cellpadding="4" cellspacing="1">
+            <h:outputLabel value="Hello Admin" style="font-size: 40px;"/>
+            <h:commandButton value="Add Car" action="#{managedAdmin.addCarBtnPressed()}"/>
+            <h:form rendered="#{managedAdmin.showAddCarMenu}">
+                <h:panelGrid columns="1" cellpadding="10" cellspacing="1">
+                    <h:outputLabel value="Brand"/>
+                    <h:inputText value="#{managedAdmin.carBrand}"/>
+
+                    <h:outputLabel value="Model"/>
+                    <h:inputText value="#{managedAdmin.carModel}"/>
+
+                    <h:outputLabel value="Year"/>
+                    <h:inputText value="#{managedAdmin.carYear}"/>
+
+                    <h:outputLabel value="Price"/>
+                    <h:inputText value="#{managedAdmin.carPrice}"/>
+                    <h:commandButton value="Add" action="#{managedAdmin.addPressed()}"/>
+                </h:panelGrid>
+            </h:form>
+            <h:commandButton value="Edit Cars" action="#{managedAdmin.showEditTable()}"/>
+            <h:dataTable value="#{managedAdmin.cars}" var="car" border="1" rendered="#{managedAdmin.showCars}">
+                <h:column>
+                    <f:facet name="header">IDs</f:facet>
+                    #{car.car_id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{car.brand}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Model</f:facet>
+                    #{car.model}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Year</f:facet>
+                    #{car.year}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Price</f:facet>
+                    <h:inputText value="#{car.price}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <h:commandButton value="Edit" action="#{managedAdmin.editCar(car.car_id,car)}"/>
+                </h:column>
+            </h:dataTable>
+            <h:commandButton rendered="#{managedAdmin.showCars}" value="Hide Menu" action="#{managedAdmin.hideEditMenu()}"/>
+            <h:commandButton value="Check Return Requests"/>
+        </h:panelGrid>
+    </h:form>
+</f:view>
+</html>

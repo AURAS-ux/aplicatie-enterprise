@@ -71,6 +71,11 @@ public class CustomerService implements CustomerServiceRemote {
     }
 
     @Override
+    public void updateCustomer(Customer newCustomer) {
+        em.merge(newCustomer);
+    }
+
+    @Override
     public void deleteCustomer(Long id) {
         Customer customer = em.find(Customer.class, id);
         if(customer != null){

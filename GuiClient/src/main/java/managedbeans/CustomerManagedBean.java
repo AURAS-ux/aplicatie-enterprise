@@ -6,6 +6,7 @@ import ejbs.customer.CustomerServiceRemote;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
@@ -23,6 +24,8 @@ public class CustomerManagedBean implements Serializable {
     private String phone;
     private String email;
     private String licenseId;
+    private Boolean isAdmin;
+    private Customer customer;
 
     public Long getCustomerId() {
         return customerId;
@@ -47,6 +50,16 @@ public class CustomerManagedBean implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
+
 
     public CustomerManagedBean() {
 
@@ -87,11 +100,22 @@ public class CustomerManagedBean implements Serializable {
             if(hasAccount){
                 String data = customerService.getCustomerData(email, licenseId);
                 Customer customer = new Gson().fromJson(data, Customer.class);
+                this.customer = customer;
                 this.name = customer.getName();
                 this.phone = customer.getPhone();
                 this.customerId = customer.getCustomer_id();
+                this.isAdmin = customer.getIsAdmin();
+
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .getSessionMap().put("role", isAdmin ? "admin" : "user");
+
+                if(isAdmin)
+                    return "adminPage?faces-redirect=true";
+                return "succes?faces-redirect=true";
+            }else{
+                return "noaccount?faces-redirect=true";
             }
-            return hasAccount ? "succes?faces-redirect=true" : "noaccount?faces-redirect=true";
+//            return hasAccount ? "succes?faces-redirect=true" : "noaccount?faces-redirect=true";
         } catch (Exception e) {
             System.out.println("Failed to access CustomerServiceRemote: " + e.getMessage());
             return null;
@@ -102,5 +126,13 @@ public class CustomerManagedBean implements Serializable {
         customerService.addCustomer(name,licenseId,email,phone);
         System.out.println("Sign in attempted with values " + email + " " + licenseId);
         return "index?faces-redirect=true";
+    }
+
+    public void editUser(){
+        customer.setName(name);
+        customer.setPhone(phone);
+        customer.setLicenceNr(licenseId);
+        customer.setEmail(email);
+        customerService.updateCustomer(customer);
     }
 }
