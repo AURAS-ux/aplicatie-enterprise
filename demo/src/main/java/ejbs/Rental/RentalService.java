@@ -7,6 +7,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import status.Status;
 
 import java.sql.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class RentalService implements RentalServiceRemote {
         }else if(customer == null){
             System.out.println("Customer not found");
         }
-        Rental rental = new Rental(rentalDate, returnDate, rentedCar, customer,price);
+        Rental rental = new Rental(rentalDate,returnDate,rentedCar,customer,price,Status.NO_ACTION);
         em.persist(rental);
     }
 
@@ -64,5 +65,11 @@ public class RentalService implements RentalServiceRemote {
             em.remove(rental);
         }else
             throw new RuntimeException("Rental not found");
+    }
+
+    @Override
+    public List<Rental> getRentalInProgress() {
+        TypedQuery<Rental> query = em.createNamedQuery("getRentalsInProgress",Rental.class);
+        return query.getResultList();
     }
 }

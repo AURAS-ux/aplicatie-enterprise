@@ -142,6 +142,10 @@ public class RentManagedBean implements Serializable {
         return "showRents?faces-redirect=true";
     }
 
+    public void RefreshRents(){
+        customerRentals = rentService.getRentalsByCustomer(customerManagedBean.getCustomerId());
+    }
+
     public void refreshAvailableCars(){
         availableCars.clear();
         List<String> rawAvailableCars = carService.getAllAvailableCars();

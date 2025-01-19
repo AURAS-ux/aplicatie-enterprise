@@ -4,6 +4,7 @@ import ejbs.car.Car;
 import ejbs.customer.Customer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import status.Status;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.sql.Date;
 @Table(name = "Rental")
 @NamedQuery(name = "getAllRentals",query = "select r from Rental r")
 @NamedQuery(name = "getRentalsByCustomer",query = "select rent from Rental rent where rent.customer.customer_id = :customerId")
+@NamedQuery(name = "getRentalsInProgress",query = "select rent from Rental rent where rent.status = status.Status.IN_PROGRESS")
 public class Rental implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -42,6 +44,11 @@ public class Rental implements Serializable {
     @Column(name = "rental_price", nullable = false)
     private Integer rentalPrice;
 
+    @NotNull
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     public Integer getRentalPrice() {
         return rentalPrice;
     }
@@ -50,12 +57,13 @@ public class Rental implements Serializable {
         this.rentalPrice = rentalPrice;
     }
 
-    public Rental(Date rentalDate, Date returnDate, Car car, Customer customer,Integer price) {
+    public Rental(Date rentalDate, Date returnDate, Car car, Customer customer, Integer rentalPrice, Status status) {
         this.rentalDate = rentalDate;
         this.returnDate = returnDate;
-        this.rentalPrice = price;
         this.car = car;
         this.customer = customer;
+        this.rentalPrice = rentalPrice;
+        this.status = status;
     }
 
     public Rental() {
@@ -102,15 +110,24 @@ public class Rental implements Serializable {
         return rental_id;
     }
 
+    public @NotNull Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NotNull Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Rental{" +
                 "rental_id=" + rental_id +
                 ", rentalDate=" + rentalDate +
                 ", returnDate=" + returnDate +
-                ", rentalPrice=" + rentalPrice +
                 ", car=" + car +
                 ", customer=" + customer +
+                ", rentalPrice=" + rentalPrice +
+                ", status=" + status +
                 '}';
     }
 }

@@ -1,6 +1,8 @@
 package managedbeans;
 
 
+import ejbs.Rental.Rental;
+import ejbs.Rental.RentalServiceRemote;
 import ejbs.car.Car;
 import ejbs.car.CarServiceRemote;
 import jakarta.ejb.EJB;
@@ -23,10 +25,14 @@ public class AdminManagedBean implements Serializable {
 
     @EJB
     private CarServiceRemote carService;
+    @EJB
+    private RentalServiceRemote rentalService;
 
     private Boolean showCars = false;
     private Boolean showAddCarMenu = false;
+    private Boolean showRents = false;
 
+    private List<Rental> rentals;
     private List<Car> cars;
     private String carBrand;
     private String carModel;
@@ -92,6 +98,22 @@ public class AdminManagedBean implements Serializable {
         this.carPrice = carPrice;
     }
 
+    public Boolean getShowRents() {
+        return showRents;
+    }
+
+    public void setShowRents(Boolean showRents) {
+        this.showRents = showRents;
+    }
+
+    public List<Rental> getRentals() {
+        return rentals;
+    }
+
+    public void setRentals(List<Rental> rentals) {
+        this.rentals = rentals;
+    }
+
     public AdminManagedBean() {}
 
     public void showEditTable(){
@@ -133,5 +155,14 @@ public class AdminManagedBean implements Serializable {
 
     public void hideEditMenu(){
         showCars = false;
+    }
+
+    public void checkReturnsPressed(){
+        this.rentals = rentalService.getRentalInProgress();
+        showRents = true;
+    }
+
+    public void hideRentsPressed(){
+        showRents = false;
     }
 }

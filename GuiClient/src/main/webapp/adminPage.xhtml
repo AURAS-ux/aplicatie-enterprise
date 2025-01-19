@@ -5,6 +5,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="rentPage.css" />
+</h:head>
 <f:view>
     <h:form>
         <h:panelGrid columns="1" cellpadding="4" cellspacing="1">
@@ -54,7 +58,48 @@
                 </h:column>
             </h:dataTable>
             <h:commandButton rendered="#{managedAdmin.showCars}" value="Hide Menu" action="#{managedAdmin.hideEditMenu()}"/>
-            <h:commandButton value="Check Return Requests"/>
+            <h:commandButton value="Check Return Requests" action="#{managedAdmin.checkReturnsPressed()}"/>
+            <h:form rendered="#{managedAdmin.showRents}">
+                <h:dataTable value="#{managedAdmin.rentals}" var="rental" border="1">
+                    <h:column>
+                        <f:facet name="header">Rental No.</f:facet>
+                        #{rental.rental_id}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Start Date</f:facet>
+                        #{rental.rentalDate}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Car Brand</f:facet>
+                        #{rental.car.brand}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Car Model</f:facet>
+                        #{rental.car.model}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Return Date</f:facet>
+                        #{rental.returnDate}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Price</f:facet>
+                        #{rental.rentalPrice}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Action</f:facet>
+                        <h:panelGrid columns="2">
+                            <h:commandButton value="Accept" styleClass="button-base button-3" />
+                            <h:commandButton value="Reject" styleClass="button-base button-5" />
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Status</f:facet>
+                        #{rental.status}
+                    </h:column>
+                </h:dataTable>
+
+                <h:commandButton value="Hide" action="#{managedAdmin.hideRentsPressed()}"/>
+            </h:form>
         </h:panelGrid>
     </h:form>
 </f:view>

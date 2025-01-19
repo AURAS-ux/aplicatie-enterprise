@@ -13,4 +13,5 @@ public interface RentalServiceRemote {
     public void addRental(Long carId, Long customerId, Date rentalDate, Date returnDate,Integer price);
     public void updateRental(String updatedRental);
     public void deleteRental(Long rentalId);
+    public List<Rental> getRentalInProgress();
 }
