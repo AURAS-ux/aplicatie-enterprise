@@ -121,7 +121,7 @@ public class AdminManagedBean implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext()
                     .getRequestMap().put("showAlert", true);
         }else {
-            carService.addCar(this.carBrand, this.carModel, this.carYear, this.carPrice);
+            carService.addCar(this.carBrand, this.carModel, this.carYear, this.carPrice,true);
         }
         showAddCarMenu = false;
     }

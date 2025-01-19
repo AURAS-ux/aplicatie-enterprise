@@ -80,7 +80,10 @@ public class RentManagedBean implements Serializable {
         this.selectedCarIds = new HashMap<>();
         List<String> rawAvailableCars = carService.getAllAvailableCars();
         for(String rawCarId : rawAvailableCars) {
-            availableCars.add(gson.fromJson(rawCarId, Car.class));
+            Car car = gson.fromJson(rawCarId, Car.class);
+            if(car.getIs_available()) {
+                availableCars.add(car);
+            }
         }
     }
 
@@ -143,7 +146,10 @@ public class RentManagedBean implements Serializable {
         availableCars.clear();
         List<String> rawAvailableCars = carService.getAllAvailableCars();
         for(String rawCarId : rawAvailableCars) {
-            availableCars.add(gson.fromJson(rawCarId, Car.class));
+            Car car = gson.fromJson(rawCarId, Car.class);
+            if(car.getIs_available()) {
+                availableCars.add(car);
+            }
         }
     }
 }

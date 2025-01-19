@@ -44,8 +44,8 @@ public class CarService implements CarServiceRemote {
     }
 
     @Override
-    public void addCar(String brand, String model, int year,int price) {
-        Car newCar = new Car(brand, model, year,price);
+    public void addCar(String brand, String model, int year,int price,boolean isAvailable) {
+        Car newCar = new Car(brand, model, year,price,isAvailable);
         em.persist(newCar);
     }
 

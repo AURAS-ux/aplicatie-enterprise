@@ -33,12 +33,17 @@ public class Car implements Serializable {
     @Column(name = "price",nullable = false)
     private Integer price;
 
+    @NotNull
+    @Column(name = "is_available",nullable = false)
+    private Boolean is_available = true;
 
-    public Car( String brand, String model, Integer year,Integer price) {
+
+    public Car( String brand, String model, Integer year,Integer price,Boolean is_available) {
         this.brand = brand;
         this.model = model;
         this.year = year;
         this.price = price;
+        this.is_available = is_available;
     }
 
     public Car() {
@@ -85,6 +90,14 @@ public class Car implements Serializable {
         this.price = price;
     }
 
+    public @NotNull Boolean getIs_available() {
+        return is_available;
+    }
+
+    public void setIs_available(@NotNull Boolean is_available) {
+        this.is_available = is_available;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -93,6 +106,7 @@ public class Car implements Serializable {
                 ", model='" + model + '\'' +
                 ", year=" + year +
                 ", price=" + price +
+                ", is_available=" + is_available +
                 '}';
     }
 
@@ -101,11 +115,11 @@ public class Car implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return Objects.equals(car_id, car.car_id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(year, car.year) && Objects.equals(price, car.price);
+        return Objects.equals(car_id, car.car_id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(year, car.year) && Objects.equals(price, car.price) && Objects.equals(is_available, car.is_available);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(car_id, brand, model, year, price);
+        return Objects.hash(car_id, brand, model, year, price, is_available);
     }
 }

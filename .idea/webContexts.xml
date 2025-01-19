@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/GuiClient/src/main/webapp/adminPage.xhtml" value="file://$PROJECT_DIR$/GuiClient/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/GuiClient/src/main/webapp/showRents.xhtml" value="file://$PROJECT_DIR$/GuiClient/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/GuiClient/src/main/webapp/succes.xhtml" value="file://$PROJECT_DIR$/GuiClient/src/main/webapp" />
       </map>
     </option>

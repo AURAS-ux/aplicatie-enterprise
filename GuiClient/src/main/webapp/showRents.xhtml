@@ -7,35 +7,42 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
 <!--    <h:outputText value="#{managedRent.customerRentals}"/>-->
-    <h:dataTable value="#{managedRent.customerRentals}" var="rental" border="1">
-        <h:column>
-            <f:facet name="header">Rental No.</f:facet>
-            #{rental.rental_id}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Start Date</f:facet>
-            #{rental.rentalDate}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Car Brand</f:facet>
-            #{rental.car.brand}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Car Model</f:facet>
-            #{rental.car.model}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Return Date</f:facet>
-            #{rental.returnDate}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Price</f:facet>
-            #{rental.rentalPrice}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Return</f:facet>
-            <h:commandButton value="Return Request"/>
-        </h:column>
-    </h:dataTable>
+    <h:form>
+        <h:dataTable value="#{managedRent.customerRentals}" var="rental" border="1">
+            <h:column>
+                <f:facet name="header">Rental No.</f:facet>
+                #{rental.rental_id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Start Date</f:facet>
+                #{rental.rentalDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Car Brand</f:facet>
+                #{rental.car.brand}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Car Model</f:facet>
+                #{rental.car.model}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Return Date</f:facet>
+                #{rental.returnDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Price</f:facet>
+                #{rental.rentalPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Return</f:facet>
+                <h:commandButton value="Return Request" action="#{emailBean.sendEmail(rental)}"
+                                 onclick="alert('Return request submitted successfully!');"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                TBD
+            </h:column>
+        </h:dataTable>
+    </h:form>
 </f:view>
 </html>
