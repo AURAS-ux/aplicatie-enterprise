@@ -32,7 +32,7 @@ public class EmailBean {
     private RentManagedBean rentManagedBean;
 
     private String recipientEmail="auraspaltaneamarian@gmail.com";
-    private String subject="Your return request has been recorded";
+    private String subject;
     private String body;
 
     public EmailBean(){
@@ -45,33 +45,53 @@ public class EmailBean {
     }
 
     public void sendEmail(Rental rental, MailType type) {
-        switch(type){
+        switch (type) {
             case RECEIVED_REQUEST:
-                this.body = "Hello dear customer. Thank you for choosing us on your journey :)\nWe want to infor you that the request for " +
-                        "return of rental no."+rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                this.body = "Hello dear customer. Thank you for choosing us on your journey :)\nWe want to inform you that the request for " +
+                        "return of rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
                         " has been successfully recorded.\n\n\n BR, Rental Team";
+                this.subject="Return request has been received ⏳";
+                rental.setStatus(Status.IN_PROGRESS);
+                break;
+
             case ACCEPTED_REQUEST:
+                this.body = "Hello dear customer. We are happy to announce you that your return request has been accepted for " +
+                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                        ".\n\n\n BR, Rental Team";
+                this.subject="Return request has been aproved ✅";
+                rental.setStatus(Status.COMPLETED);
+                break;
 
             case DENIED_REQUEST:
+                this.body = "Hello dear customer. We regret to announce you that your return request has been denied for " +
+                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                        ". Please contact a member of our team for additional information at rentacar@ty.com.\n\n\n BR, Rental Team";
+                this.subject="Return request has been rejected ❌";
+                rental.setStatus(Status.DENIED);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown MailType: " + type);
         }
+
         try {
             MimeMessage message = new MimeMessage(jms);
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-            message.setSubject(subject);
+            message.setSubject(subject,"UTF-8");
             message.setText(body);
 
             Gson gson = new Gson();
-            rental.setStatus(Status.IN_PROGRESS);
             rentService.updateRental(gson.toJson(rental));
             Transport.send(message);
             rentManagedBean.RefreshRents();
             System.out.println("Sent message successfully to " + recipientEmail);
         } catch (MessagingException e) {
             System.out.println(e.getMessage());
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     public String getRecipientEmail() {
         return recipientEmail;

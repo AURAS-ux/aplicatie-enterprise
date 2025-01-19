@@ -88,8 +88,10 @@
                     <h:column>
                         <f:facet name="header">Action</f:facet>
                         <h:panelGrid columns="2">
-                            <h:commandButton value="Accept" styleClass="button-base button-3" />
-                            <h:commandButton value="Reject" styleClass="button-base button-5" />
+                            <h:commandButton value="Accept" styleClass="button-base button-3" action="#{emailBean.sendEmail(rental,mailTypeProvider.acceptedRequest)}"
+                                             onclick="alert('Approved return request!');"/>
+                            <h:commandButton value="Reject" styleClass="button-base button-5" action="#{emailBean.sendEmail(rental,mailTypeProvider.rejectedRequest)}"
+                                             onclick="alert('Rejected return request!');"/>
                         </h:panelGrid>
                     </h:column>
                     <h:column>

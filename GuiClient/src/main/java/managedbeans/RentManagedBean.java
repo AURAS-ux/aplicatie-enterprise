@@ -12,6 +12,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import status.Status;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -57,6 +58,10 @@ public class RentManagedBean implements Serializable {
     }
     public List<Car> getAvailableCars() {
         return availableCars;
+    }
+
+    public boolean CanReturn(Rental rental) {
+        return rental.getStatus() == Status.IN_PROGRESS || rental.getStatus() == Status.NO_ACTION;
     }
 
     public void setAvailableCars(List<Car> availableCars) {
