@@ -10,8 +10,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "Car")
 @NamedQuery(name = "getAllCars",query = "select c from Car c")
-@NamedQuery(name = "getAvailableCars",query = "SELECT c FROM Car c WHERE c.car_id NOT IN (SELECT r.car.car_id FROM Rental r)")
-public class Car implements Serializable {
+@NamedQuery(
+        name = "getAvailableCars",
+        query = "SELECT c FROM Car c WHERE c.is_available = true AND c.car_id NOT IN (SELECT r.car.car_id FROM Rental r)"
+)public class Car implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

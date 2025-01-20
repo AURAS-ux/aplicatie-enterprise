@@ -49,12 +49,20 @@
                     #{car.year}
                 </h:column>
                 <h:column>
+                    <f:facet name="header">Available</f:facet>
+                    #{car.is_available}
+                </h:column>
+                <h:column>
                     <f:facet name="header">Price</f:facet>
                     <h:inputText value="#{car.price}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header">Edit</f:facet>
                     <h:commandButton value="Edit" action="#{managedAdmin.editCar(car.car_id,car)}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Remove</f:facet>
+                    <h:commandButton value="Exclude Car" action="#{managedAdmin.excludeCar(car)}"/>
                 </h:column>
             </h:dataTable>
             <h:commandButton rendered="#{managedAdmin.showCars}" value="Hide Menu" action="#{managedAdmin.hideEditMenu()}"/>

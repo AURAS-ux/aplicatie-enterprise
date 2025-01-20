@@ -1,6 +1,7 @@
 package managedbeans;
 
 
+import com.google.gson.Gson;
 import ejbs.Rental.Rental;
 import ejbs.Rental.RentalServiceRemote;
 import ejbs.car.Car;
@@ -164,5 +165,12 @@ public class AdminManagedBean implements Serializable {
 
     public void hideRentsPressed(){
         showRents = false;
+    }
+
+    public void excludeCar(Car car){
+        Gson gson = new Gson();
+        car.setIs_available(false);
+        String json = gson.toJson(car);
+        carService.updateCar(json);
     }
 }
