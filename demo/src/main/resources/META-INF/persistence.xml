@@ -3,10 +3,16 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-    <persistence-unit name="default">
 
-    </persistence-unit>
+    <persistence-unit name="default" />
+
     <persistence-unit name="defaultTdp" transaction-type="JTA">
         <jta-data-source>jdbc/myFirstResource</jta-data-source>
+
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.create-source" value="metadata"/>
+            <property name="jakarta.persistence.schema-generation.drop-source" value="metadata"/>
+        </properties>
     </persistence-unit>
 </persistence>

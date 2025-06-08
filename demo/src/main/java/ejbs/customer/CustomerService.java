@@ -59,7 +59,7 @@ public class CustomerService implements CustomerServiceRemote {
 
     @Override
     public void addCustomer(String name, String licenseNr, String email, String phone) {
-       Customer customer = new Customer(name, licenseNr, email, phone);
+       Customer customer = new Customer(name, licenseNr, email, phone,false);
        em.persist(customer);
     }
 
