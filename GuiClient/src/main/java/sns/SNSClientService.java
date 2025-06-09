@@ -2,6 +2,8 @@ package sns;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import s3logger.S3Logger;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.*;
@@ -14,10 +16,13 @@ public class SNSClientService {
     private SnsClient snsClient;
     private Map<NotificationType, String> topicArns = new HashMap<>();
 
+    @Inject
+    private S3Logger s3Logger;
+
     @PostConstruct
     public void initialize() {
         snsClient = SnsClient.builder()
-                .region(Region.US_EAST_1) 
+                .region(Region.US_EAST_1)
                 .build();
 
         initializeTopics();
@@ -56,6 +61,8 @@ public class SNSClientService {
                     .build();
 
             snsClient.publish(request);
+            s3Logger.logSms(phoneNumber, message, true);
+
         } catch (SnsException e) {
             throw new RuntimeException("Failed to send SMS notification", e);
         }

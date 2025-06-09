@@ -14,6 +14,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import s3logger.S3Logger;
 import sns.SNSClientService;
 import status.Status;
 
@@ -39,6 +40,8 @@ public class RentManagedBean implements Serializable {
     private CarServiceRemote carService;
     @EJB
     private RentalServiceRemote rentService;
+    @Inject
+    private S3Logger s3Logger;
 
     private Gson gson;
     private List<Car> availableCars;
@@ -143,7 +146,16 @@ public class RentManagedBean implements Serializable {
 
             rentService.addRental(selectedItem, customerManagedBean.getCustomerId(), Date.valueOf(LocalDate.now()),
                     Date.valueOf(LocalDate.now().plusDays(Integer.parseInt(days))), totalPrice);
+            s3Logger.logRental(
+                    selectedItem,
+                    "CREATED",
+                    String.format("Car: %s %s, Days: %s, Price: %d",
+                            car.getBrand(),
+                            car.getModel(),
+                            rentDays.getOrDefault(selectedItem, "0"),
+                            car.getPrice() * Integer.parseInt(rentDays.getOrDefault(selectedItem, "0"))));
         }
+
         cloudWatchMonitor.recordApiUsage("rentCar");
         refreshAvailableCars();
 

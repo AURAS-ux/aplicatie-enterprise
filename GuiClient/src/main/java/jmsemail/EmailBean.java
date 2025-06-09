@@ -19,6 +19,8 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import managedbeans.RentManagedBean;
+import s3logger.S3Logger;
+import s3logger.S3Logger.LogLevel;
 import sns.SNSClientService;
 import status.Status;
 
@@ -36,6 +38,8 @@ public class EmailBean {
     private CloudWatchMonitor cloudWatchMonitor;
     @Inject
     private SNSClientService smsService;
+    @Inject
+    private S3Logger s3Logger;
 
     private String recipientEmail = "auraspaltaneamarian@gmail.com";
     private String subject;
@@ -99,8 +103,14 @@ public class EmailBean {
             rentManagedBean.RefreshRents();
             System.out.println("Sent message successfully to " + recipientEmail);
             emailSuccess = true;
+            s3Logger.log(LogLevel.INFO, "EMAIL",
+                    String.format("Email type %s sent to %s for rental #%d",
+                            type, recipientEmail, rental.getRental_id()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            s3Logger.log(LogLevel.ERROR, "EMAIL",
+                    String.format("Failed to send email type %s to %s for rental #%d: %s",
+                            type, recipientEmail, rental.getRental_id(), e.getMessage()));
         } finally {
             cloudWatchMonitor.recordEmailSent(recipientEmail, type, rental.getRental_id(), emailSuccess);
             cloudWatchMonitor.recordRentalStatusChange(rental, rental.getStatus());
