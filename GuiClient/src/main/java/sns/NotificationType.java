@@ -1,0 +1,9 @@
+package sns;
+
+public enum NotificationType {
+    RENTAL_STATUS_CHANGE,
+    PAYMENT_CONFIRMATION,
+    RESERVATION_REMINDER,
+    VEHICLE_MAINTENANCE,
+    PROMOTION
+}

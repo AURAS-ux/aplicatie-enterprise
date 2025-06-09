@@ -1,5 +1,6 @@
 package jmsemail;
 
+import cloudwatchservice.CloudWatchMonitor;
 import com.google.gson.Gson;
 import ejbs.Rental.Rental;
 import ejbs.Rental.RentalServiceRemote;
@@ -18,6 +19,7 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import managedbeans.RentManagedBean;
+import sns.SNSClientService;
 import status.Status;
 
 @Named
@@ -30,43 +32,53 @@ public class EmailBean {
     private RentalServiceRemote rentService;
     @Inject
     private RentManagedBean rentManagedBean;
+    @Inject
+    private CloudWatchMonitor cloudWatchMonitor;
+    @Inject
+    private SNSClientService smsService;
 
-    private String recipientEmail="auraspaltaneamarian@gmail.com";
+    private String recipientEmail = "auraspaltaneamarian@gmail.com";
     private String subject;
     private String body;
 
-    public EmailBean(){
+    public EmailBean() {
         System.out.println("Initializing EmailBean...");
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         System.out.println("Initializing EmailBean...");
     }
 
     public void sendEmail(Rental rental, MailType type) {
         switch (type) {
             case RECEIVED_REQUEST:
-                this.body = "Hello dear customer. Thank you for choosing us on your journey :)\nWe want to inform you that the request for " +
-                        "return of rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                this.body = "Hello dear customer. Thank you for choosing us on your journey :)\nWe want to inform you that the request for "
+                        +
+                        "return of rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " "
+                        + rental.getCar().getModel() +
                         " has been successfully recorded.\n\n\n BR, Rental Team";
-                this.subject="Return request has been received ⏳";
+                this.subject = "Return request has been received ⏳";
                 rental.setStatus(Status.IN_PROGRESS);
                 break;
 
             case ACCEPTED_REQUEST:
-                this.body = "Hello dear customer. We are happy to announce you that your return request has been accepted for " +
-                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                this.body = "Hello dear customer. We are happy to announce you that your return request has been accepted for "
+                        +
+                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " "
+                        + rental.getCar().getModel() +
                         ".\n\n\n BR, Rental Team";
-                this.subject="Return request has been aproved ✅";
+                this.subject = "Return request has been aproved ✅";
                 rental.setStatus(Status.COMPLETED);
                 break;
 
             case DENIED_REQUEST:
-                this.body = "Hello dear customer. We regret to announce you that your return request has been denied for " +
-                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " " + rental.getCar().getModel() +
+                this.body = "Hello dear customer. We regret to announce you that your return request has been denied for "
+                        +
+                        "rental no. " + rental.getRental_id() + " for car " + rental.getCar().getBrand() + " "
+                        + rental.getCar().getModel() +
                         ". Please contact a member of our team for additional information at rentacar@ty.com.\n\n\n BR, Rental Team";
-                this.subject="Return request has been rejected ❌";
+                this.subject = "Return request has been rejected ❌";
                 rental.setStatus(Status.DENIED);
                 break;
 
@@ -74,10 +86,11 @@ public class EmailBean {
                 throw new IllegalArgumentException("Unknown MailType: " + type);
         }
 
+        boolean emailSuccess = false;
         try {
             MimeMessage message = new MimeMessage(jms);
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-            message.setSubject(subject,"UTF-8");
+            message.setSubject(subject, "UTF-8");
             message.setText(body);
 
             Gson gson = new Gson();
@@ -85,13 +98,19 @@ public class EmailBean {
             Transport.send(message);
             rentManagedBean.RefreshRents();
             System.out.println("Sent message successfully to " + recipientEmail);
-        } catch (MessagingException e) {
-            System.out.println(e.getMessage());
+            emailSuccess = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        } finally {
+            cloudWatchMonitor.recordEmailSent(recipientEmail, type, rental.getRental_id(), emailSuccess);
+            cloudWatchMonitor.recordRentalStatusChange(rental, rental.getStatus());
+        }
+
+        if (rental.getCustomer() != null && rental.getCustomer().getPhone() != null) {
+            String smsMessage = "Your rental #" + rental.getRental_id() + " status: " + rental.getStatus();
+            smsService.sendSMS("+40732855121", smsMessage);
         }
     }
-
 
     public String getRecipientEmail() {
         return recipientEmail;
